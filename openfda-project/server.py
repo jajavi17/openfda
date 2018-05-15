@@ -5,10 +5,12 @@ import socketserver
 
 PORT = 8000
 
+socketserver.TCPServer.allow_reuse_address = True
+
 OPENFDA_API_URL = "api.fda.gov"
 OPENFDA_API_EVENT = "/drug/event.json"
-OPENFDA_API_DRUG = '&search=patient.drug.medicinalproduct:'
-OPENFDA_API_COMPANY = '&search=companynumb:'
+OPENFDA_API_DRUG = "&search=patient.drug.medicinalproduct:"
+OPENFDA_API_COMPANY = "&search=companynumb:"
 
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     
@@ -142,47 +144,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                         </html>
                     """
             self.wfile.write(bytes(mensaje, "utf8"))
-
-        elif 'listWarnings' in self.path:
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            conn = http.client.HTTPSConnection(self.OPENFDA_API_URL)
-            conn.request("GET", self.OPENFDA_API_EVENT + "?limit=" + str(limit))
-            r1 = conn.getresponse()
-            repos_raw = r1.read().decode("utf8")
-            repos = json.loads(repos_raw)
-            info = repos['results']
-            advertencias = []
-
-            for i in info:
-
-                if ('warnings' in i):
-                    advertencias.append(i['warnings'])
-
-                else:
-                    advertencias.append("No contiene advertencias")
-
-            mensaje = """
-                        <html>
-                            <head>
-                                <title>OpenFDA </title>
-                            </head>
-                            <body>
-                            <body style = 'background-color: lightgreen'><html>
-                            <h1>Listado de advertencias </h1>
-                                <ul>
-                    """
-            for obj in advertencias:
-                mensaje += "<li>" + obj + "</li>"
-
-            mensaje += """
-                                </ul>
-                            </body>
-                        </html>
-                    """
-            self.wfile.write(bytes(mensaje, "utf8"))
-
+            
         elif 'searchDrug' in self.path:
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -205,7 +167,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                             </head>
                             <body>
                             <body style = 'background-color: lightgreen><html>
-                            <h1>Farmacos buscados </h1>
+                            <h1>Resultados: </h1>
                                 <ul>
                     """
             for obj in farmacos:
@@ -241,7 +203,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                                         </head>
                                         <body>
                                         <body style = 'background-color: lightgreen'><html>
-                                        <h1>Empresas buscadas </h1>
+                                        <h1>Resultados: </h1>
                                             <ul>
                                 """
             for obj in empresas:
@@ -267,8 +229,6 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         return
 
-
-socketserver.TCPServer.allow_reuse_address = True
 
 Handler = testHTTPRequestHandler
 
