@@ -12,15 +12,15 @@ OPENFDA_API_EVENT = "/drug/event.json"
 OPENFDA_API_DRUG = "&search=patient.drug.medicinalproduct:"
 OPENFDA_API_COMPANY = "&search=companynumb:"
 
+
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
-    
 
     def get_index(self):
         html = """
             <!DOCTYPE html>
             <html lang="es">
             <head>
-                <meta charset="UTF-8">
+                <meta charset="utf-8">
                 <title>Javi_Martinez_Project</title>
             </head>
             <body>
@@ -30,7 +30,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
               <input type="submit" value="List Drugs">
                 Limit: <input type="text" name="limit" value="10">
             </form>\n
-            
+
             <form action = "/ListCompanies" method="get">
               <input type="submit" value="Lists Companies">
             </form>\n
@@ -39,12 +39,12 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
               <input type="submit" value="Search Drug">
                 : <input type="text" name="Principio activo" value="">
             </form>\n
-            
+
             <form action = "/SearchCompany" method="get">
               <input type="submit" value="Search Companie">
                 : <input type="text" name="Nombre empresaa" value="">
             </form>
-            
+
             </body>
             </html>"""
         return html
@@ -66,7 +66,6 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         else:
             print("No hay parámetro")
-
 
         if self.path == '/':
 
@@ -95,7 +94,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 <!DOCTYPE html>
                    <html lang="es">
                    <head>
-                       <meta charset="UTF-8">
+                       <meta charset="utf-8">
                    </head>
                    <body>
                    <body style="background-color: lightgreen"></body>
@@ -129,7 +128,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 <!DOCTYPE html>
                    <html lang="es">
                    <head>
-                       <meta charset="UTF-8">
+                       <meta charset="utf-8">
                    </head>
                    <body>
                    <body style="background-color: lightgreen"></body>
@@ -144,7 +143,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                         </html>
                     """
             self.wfile.write(bytes(mensaje, "utf8"))
-            
+
         elif 'searchDrug' in self.path:
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
@@ -176,7 +175,6 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             mensaje += """
                                 </ul>
                             </body>
-
                         </html>
                     """
             self.wfile.write(bytes(mensaje, "utf8"))
