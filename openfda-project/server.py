@@ -5,15 +5,12 @@ import socketserver
 
 PORT = 8000
 
-socketserver.TCPServer.allow_reuse_address = True
-
-OPENFDA_API_URL = "api.fda.gov"
-OPENFDA_API_EVENT = "/drug/event.json"
-OPENFDA_API_DRUG = "&search=patient.drug.medicinalproduct:"
-OPENFDA_API_COMPANY = "&search=companynumb:"
-
 
 class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
+    OPENFDA_API_URL = "api.fda.gov"
+    OPENFDA_API_EVENT = "/drug/event.json"
+    OPENFDA_API_DRUG = "&search=patient.drug.medicinalproduct:"
+    OPENFDA_API_COMPANY = "&search=companynumb:"
 
     def get_index(self):
         html = """
@@ -21,30 +18,28 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             <html lang="es">
             <head>
                 <meta charset="utf-8">
-                <title>Javi_Martinez_Project</title>
+                <title>Javi Martinez Project</title>
             </head>
             <body>
             <body style="background-color: lightgreen"></body>
             <p style="color:blue;font-size:50px;">OpenFDA Project</p>
             <form action = "/listDrugs" method="get">
-              <input type="submit" value="List Drugs">
+                <input type="submit" value="List Drugs">
                 Limit: <input type="text" name="limit" value="10">
-            </form>\n
-
+            </form>
             <form action = "/ListCompanies" method="get">
-              <input type="submit" value="Lists Companies">
-            </form>\n
+                <input type="submit" value="Lists Companies">
+                Limit: <input type="text" name="limit" value="10">
+            </form>
             *******************************************************
             <form action = "/SearchDrug" method="get">
-              <input type="submit" value="Search Drug">
+                <input type="submit" value="Search Drug">
                 : <input type="text" name="Principio activo" value="">
-            </form>\n
-
+            </form>
             <form action = "/SearchCompany" method="get">
-              <input type="submit" value="Search Companie">
+                <input type="submit" value="Search Companie">
                 : <input type="text" name="Nombre empresaa" value="">
             </form>
-
             </body>
             </html>"""
         return html
@@ -95,6 +90,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                    <html lang="es">
                    <head>
                        <meta charset="utf-8">
+                       <title>Javi Martinez List Drugs</title>
                    </head>
                    <body>
                    <body style="background-color: lightgreen"></body>
@@ -125,15 +121,16 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             for i in info:
                 empresas += [i['companynumb']]
             mensaje = """
-                <!DOCTYPE html>
-                   <html lang="es">
-                   <head>
-                       <meta charset="utf-8">
-                   </head>
-                   <body>
-                   <body style="background-color: lightgreen"></body>
-                   <p style="color:blue;font-size:50px;">List Companies</p>
-                   <ul>"""
+                        <!DOCTYPE html>
+                           <html lang="es">
+                           <head>
+                               <meta charset="utf-8">
+                               <title>Javi Martinez List Companies</title>
+                           </head>
+                           <body>
+                           <body style="background-color: lightgreen"></body>
+                           <p style="color:blue;font-size:50px;">List Companies</p>
+                           <ul>"""
             for obj in empresas:
                 mensaje += "<li>" + obj + "</li>"
 
@@ -217,7 +214,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         elif "secret" in self.path:
             self.send_error(401)
             self.send_header("www-Aunthenticate", "Basic real")
-            self.end_header()
+            self.end_headers()
 
         else:
             self.send_error(404)
@@ -227,6 +224,7 @@ class testHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         return
 
+socketserver.TCPServer.allow_reuse_address = True
 
 Handler = testHTTPRequestHandler
 
